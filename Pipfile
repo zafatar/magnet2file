@@ -1,0 +1,16 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+
+[packages]
+requests = ">=2.19.1"
+lxml = ">=4.2.5"
+pytest = ">=3.8.0"
+PyYAML = ">=3.12"
+
+[requires]
+python_version = "3.7"

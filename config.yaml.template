@@ -1,0 +1,15 @@
+seedr:
+  username: some@email.com
+  password: somepassword
+  api:
+    url: api.seedr.com
+
+vpn:
+  username: vpn_username
+  password: vpn_password
+
+yify:
+  url: https://yts.ag
+
+showrss-info:
+  url: https://showrss.info/browse
