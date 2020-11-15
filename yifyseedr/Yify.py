@@ -17,7 +17,7 @@ class Yify:
     """
     @staticmethod
     def search_movies(search_string):
-        search_url = MAIN_URL + "/browse-movies/" + quote(search_string) + "/all/all/0/latest"
+        search_url = MAIN_URL + "/browse-movies/" + quote(search_string) + "/all/all/0/latest/0/all"
         response = requests.get(search_url)
         tree = html.fromstring(response.content)
 
