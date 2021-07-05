@@ -17,7 +17,7 @@ def update_progress(progress):
         print("")  # kind of eol
 
 
-def pprint(dict_to_print: None) -> None:
+def pprint_dict(dict_to_print: None) -> None:
     max_key_length = 0
     for key, value in dict_to_print.items():
         if len(key) > max_title_length:
