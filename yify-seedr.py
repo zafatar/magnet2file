@@ -13,7 +13,7 @@ from yifyseedr.ShowRSS import ShowRSS
 
 from yifyseedr.Seedr import Seedr
 
-from utils.utils import current_connection
+from utils.utils import current_connection, pprint_dict
 
 from utils.nordvpn import get_best_available_server, get_country_list, print_country_list
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
         folder_number = input("Select a folder for details [1.." + str(len(folder_dict)) + "] :")
         selected_folder = folder_dict[int(folder_number)]
 
-        print(selected_folder)
+        pprint_dict(selected_folder)
 
         folder_dict = seedr.get_folders_list(folder_id=selected_folder.get('id'))
         Seedr.print_folders(folder_dict)
@@ -114,7 +114,8 @@ if __name__ == '__main__':
         file_number = input("Select a file to download [1.." + str(len(folder_dict)) + "] :")
         selected_file = folder_dict[int(file_number)]
 
-        print(selected_file)
+        pprint_dict(selected_file)
+
         downloaded_file = seedr.get_file(file_id=selected_file.get('id'),
                                          file_name=selected_file.get('name'),
                                          folder=args.folder)
