@@ -21,9 +21,10 @@ class Client:
 
     @staticmethod
     def basic_headers():
-        return Client.http_headers(auth_required=False, content_type="application/json")
+        return Client.http_headers(auth_required=False,
+                                   content_type="application/json")
 
     @staticmethod
     def auth_header():
         # TODO: To be improved.
-        return config.CONFIG['database']['auth_prefix'] + " " + config.CONFIG['database']['auth_token']
+        return None
