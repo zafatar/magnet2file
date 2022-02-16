@@ -1,5 +1,6 @@
-requests>=2.19.1
-lxml>=4.2.5
-pytest>=3.8.0
-PyYAML>=3.12
-flake8
+requests==2.27.1
+lxml==4.7.1
+pytest==7.0.1
+PyYAML==6.0
+flake8==4.0.1
+autopep8==1.6.0
