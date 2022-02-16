@@ -22,25 +22,25 @@ def get_country_list():
             'servers_count': country.get('servers_count')
         }
 
-        results[country.get('name')] = result
+        results[country.get('code')] = result
 
     return results
 
 
 def print_country_list(countries=None):
-    for country_name in countries:
-        country = countries.get(country_name)
+    for country_code, country in countries.items():
         print("{} : {} : {} ({})".format(country.get('id'),
-                                         country.get('code'),
-                                         country_name,
+                                         country_code,
+                                         country.get('name'),
                                          country.get('servers_count')))
 
 
 def get_best_available_server(country_id=0):
     action = "servers_recommendations"
-    URL = "{}?action={}&filters={'country_id':{}}".format(NV_URL, action, 174)
+    country_id = 174
+    URL = f"{NV_URL}?action={action}&filters={'country_id':{country_id}}"
+
     ip_json = requests.get(URL).text
-    print(URL)
 
     result = json.loads(ip_json)
     return result

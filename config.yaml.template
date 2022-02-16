@@ -1,12 +1,14 @@
+ipchecker_service: ipinfo.io
+
+vpn:
+  username: vpn_username
+  password: vpn_password
+
 seedr:
   username: some@email.com
   password: somepassword
   api:
     url: api.seedr.com
-
-vpn:
-  username: vpn_username
-  password: vpn_password
 
 yify:
   url: https://yts.ag
