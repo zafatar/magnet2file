@@ -1,11 +1,16 @@
-# Yify.py
-
-import config as conf
+# -*- coding: utf-8 -*-
+#
+# services/Yify.py
+#
 import requests
 from urllib.parse import quote
 from lxml import html
 from utils.utils import update_progress
-from . import Film, Torrent
+
+from yifyseedr.services import Services
+from yifyseedr.services.Seedr import Seedr
+from yifyseedr.models.Film import Film
+from yifyseedr.models.Torrent import Torrent
 
 MAIN_URL = "https://yts.mx"
 MAX_NUMBER = 20
@@ -15,6 +20,32 @@ class Yify:
     """
     Yify class
     """
+    CODE = Services.YIFY
+    seedr_service = None
+
+    def __init__(self, seedr_service: Seedr = None):
+        self.seedr_service = seedr_service
+
+    def run(self):
+        search_string = input("Search in Yify: ")
+
+        # TODO: Sanitize the search string
+        film_dict = Yify.search_movies(search_string)
+
+        if film_dict is not None:
+            print(f"\n{len(film_dict)} found for `{search_string}`\n")
+            Yify.print_films(film_dict)
+
+            film_number = input(f"\nSelect a movie for details [1..{len(film_dict)}]: ")
+            selected_film = film_dict[int(film_number)]
+
+            for torrent in selected_film.torrents:
+                print(torrent)
+                if torrent.type.startswith('1080p'):
+                    self.seedr_service.add_file_from_magnet(torrent.magnet)
+        else:
+            print(f"No film found for `{search_string}`\n")
+
     @staticmethod
     def search_movies(search_string):
         search_url = MAIN_URL + "/browse-movies/" + quote(search_string) + "/all/all/0/latest/0/all"
@@ -28,7 +59,7 @@ class Yify:
 
         if movies_found[0] is not None:
             pieces = movies_found[0].split(' ')
-            number_of_movies = pieces[0]
+            number_of_movies = int(pieces[0])
 
         films = tree.xpath('//div[contains(@class, "browse-movie-wrap")]')
 
@@ -43,7 +74,10 @@ class Yify:
             year = film_node.xpath('.//div[@class="browse-movie-year"]/text()')
             rating = film_node.xpath('.//h4[@class="rating"]/text()')
 
-            film = Film(title=title[0], link=link[0], year=year[0], rating=rating[0])
+            film = Film(title=title[0],
+                        link=link[0],
+                        year=year[0],
+                        rating=rating[0])
 
             film_details = requests.get(link[0])
             film_details_tree = html.fromstring(film_details.content)
@@ -67,7 +101,7 @@ class Yify:
             # print("".join(["-"] * 100))
 
             film_dict[count] = film
-            update_progress(count * int(100 / int(number_of_movies)))
+            update_progress(count, number_of_movies)
             count += 1
 
         return film_dict

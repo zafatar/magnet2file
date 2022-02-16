@@ -1,5 +1,6 @@
 # config.py
 
+import os
 import yaml
 
 
@@ -9,20 +10,17 @@ class BaseConfig(object):
     """
     DEBUG = True
     TESTING = False
+    IPCHECKER_SERVICE = None
     SEEDR_USERNAME = None
     SEEDR_PASSWORD = None
     SEEDR_API_URL = None
     VPN_USERNAME = None
     VPN_PASSWORD = None
 
-
-class Local(BaseConfig):
-    """
-    Local Configuration
-    """
     def load_config(self):
         self.DEBUG = True
         self.TESTING = False
+        self.IPCHECKER_SERVICE = CONFIG['ipchecker_service']
         self.SEEDR_USERNAME = CONFIG['seedr']['username']
         self.SEEDR_PASSWORD = CONFIG['seedr']['password']
         self.SEEDR_API_URL = CONFIG['seedr']['api']['url']
@@ -30,17 +28,19 @@ class Local(BaseConfig):
         self.VPN_PASSWORD = CONFIG['vpn']['password']
 
 
-def app_config(env_name):
+def get_config():
     """
     Configuration object by environment name
 
-    :param env_name:
-    :return:
+    :return: config object
     """
     global CONFIG
     CONFIG = load_config_from_yaml("config.yaml")
 
-    config = Local()
+    config_dir_path = os.path.dirname(os.path.realpath(__file__))
+    CONFIG = load_config_from_yaml(config_dir_path + "/config.yaml")
+
+    config = BaseConfig()
     config.load_config()
 
     return config

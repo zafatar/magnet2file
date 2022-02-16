@@ -1,7 +1,7 @@
 # Film.py
 
 
-class Film(object):
+class Film:
     """
     Film class
     """
@@ -34,16 +34,3 @@ class Film(object):
 
     def __repr__(self):
         return '<Film.title {}>'.format(self.title)
-
-
-class Torrent(object):
-    """
-    Torrent class
-    """
-    def __init__(self, type=None, size=None, magnet=None):
-        self.type = type
-        self.size = size
-        self.magnet = magnet
-
-    def __repr__(self):
-        return '<Torrent.type {}>'.format(self.type)
