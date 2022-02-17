@@ -16,7 +16,8 @@ from utils.utils import yes_or_no
 
 from config import get_config
 
-from magnet2file.services import Services, ServiceFactory
+from magnet2file.services import Services
+from magnet2file.services.ServiceFactory import ServiceFactory
 
 # Read and load command line params
 parser = argparse.ArgumentParser(description='Magnet2File client')
@@ -93,22 +94,6 @@ if __name__ == '__main__':
 
     # Pick the service and then run it.
     service = ServiceFactory.get_service(selected_service, config)
-    service = ServiceFactory.get
-
-    # dependency for the Yify and ShowRSS
-    # seedr_service = Seedr({
-    #     'email': config.SEEDR_USERNAME,
-    #     'password': config.SEEDR_PASSWORD
-    # })
-
-    # if selected_service == Services.YIFY:
-    #     service = Yify(seedr_service)
-    # elif selected_service == Services.SHOWRSS:
-    #     service = ShowRSS(seedr_service)
-    # elif selected_service == Services.SEEDR:
-    #     service = seedr_service
-    # else:
-    #     raise(f"Unsupported service: {selected_service}")
 
     if service:
         service.run()

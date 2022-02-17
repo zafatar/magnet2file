@@ -1,4 +1,6 @@
-# utils.py
+# -*- coding: utf-8 -*-
+"""Generic utility methods
+"""
 
 
 def update_progress(count: int = 0, total: int = 100):
@@ -13,21 +15,42 @@ def update_progress(count: int = 0, total: int = 100):
     if progress > 100 or count == total:
         progress = 100
 
-    print("\r [{0}{1}] {2}%".format('#'*(progress//10),
-                                    ' '*(10 - progress//10),
-                                    progress), end='')
+    print(progress_bar(progress), end='')
+
     if progress == 100:
         print("")  # kind of eol
 
 
-def pprint_dict(dict_to_print: None) -> None:
+def progress_bar(progress: int = 0) -> str:
+    """This method prepares progress bar as string
+    with `#` and space and percentage value.
+
+    Args:
+        progress (int): progress over 100
+
+    Returns:
+        str: progres bar with percentage info.
+    """
+    completed = '#'*(progress//10)
+    not_completed = ' '*(10-progress//10)
+    return f"\r [{completed}{not_completed}] {progress}%"
+
+
+def pprint_dict(dict_to_print: dict = None) -> None:
+    """This prints the given dict in formatted way where
+    it calculates the max for the keys and fills with spaces
+    if the key has less chars than max
+
+    Args:
+        dict_to_print (dict): dict to print
+    """
     max_title_length = 0
     for key, value in dict_to_print.items():
         if len(key) > max_title_length:
             max_title_length = len(key)
 
     for key, value in dict_to_print.items():
-        print("\t{} - {}".format(str(key).ljust(max_title_length), value))
+        print("\t%s - %s", str(key).ljust(max_title_length), value)
 
 
 def yes_or_no(question: str = None, default: str = "yes") -> bool:
@@ -48,7 +71,7 @@ def yes_or_no(question: str = None, default: str = "yes") -> bool:
     elif default == "no":
         prompt = " [y/N] "
     else:
-        raise ValueError("invalid default answer: '%s'" % default)
+        raise ValueError(f"invalid default answer: '{default}'")
 
     while True:
         choice = input(question + prompt).lower()

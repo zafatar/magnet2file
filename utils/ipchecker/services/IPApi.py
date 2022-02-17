@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+"""Library for the IPApi related calls
+"""
 from requests import Response
 from utils.ipchecker.services import IPService
 
