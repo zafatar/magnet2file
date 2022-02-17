@@ -13,10 +13,10 @@ from utils.utils import yes_or_no
 
 from config import get_config
 
-from yifyseedr.services import Services
-from yifyseedr.services.Seedr import Seedr
-from yifyseedr.services.ShowRSS import ShowRSS
-from yifyseedr.services.Yify import Yify
+from magnet2file.services import Services
+from magnet2file.services.Seedr import Seedr
+from magnet2file.services.ShowRSS import ShowRSS
+from magnet2file.services.Yify import Yify
 
 # Load the config
 config = get_config()
