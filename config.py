@@ -1,12 +1,14 @@
-# config.py
-
+# -*- coding: utf-8 -*-
+"""Config class contains the set of configuration values
+read from a YAML file and stored into a dict.
+"""
 import os
 import yaml
 
 
-class BaseConfig(object):
+class Config:
     """
-    Base configuration
+    Base configuration class
     """
     DEBUG = True
     TESTING = False
@@ -17,15 +19,21 @@ class BaseConfig(object):
     VPN_USERNAME = None
     VPN_PASSWORD = None
 
-    def load_config(self):
+    def load_config(self, config: dict = None):
+        """load the config values from the global variable
+        into the Config class attributes.
+        """
         self.DEBUG = True
         self.TESTING = False
-        self.IPCHECKER_SERVICE = CONFIG['ipchecker_service']
-        self.SEEDR_USERNAME = CONFIG['seedr']['username']
-        self.SEEDR_PASSWORD = CONFIG['seedr']['password']
-        self.SEEDR_API_URL = CONFIG['seedr']['api']['url']
-        self.VPN_USERNAME = CONFIG['vpn']['username']
-        self.VPN_PASSWORD = CONFIG['vpn']['password']
+        self.IPCHECKER_SERVICE = config['ipchecker_service']
+        self.SEEDR_USERNAME = config['seedr']['username']
+        self.SEEDR_PASSWORD = config['seedr']['password']
+        self.SEEDR_API_URL = config['seedr']['api']['url']
+        self.VPN_USERNAME = config['vpn']['username']
+        self.VPN_PASSWORD = config['vpn']['password']
+
+    def __repr__(self) -> str:
+        return f"<Config: debug: {self.DEBUG}, testing: {self.TESTING}>"
 
 
 def get_config():
@@ -34,28 +42,45 @@ def get_config():
 
     :return: config object
     """
-    global CONFIG
-    CONFIG = load_config_from_yaml("config.yaml")
+    config_from_yaml = load_config_from_yaml("config.yaml")
 
     config_dir_path = os.path.dirname(os.path.realpath(__file__))
-    CONFIG = load_config_from_yaml(config_dir_path + "/config.yaml")
+    config = load_config_from_yaml(config_dir_path + "/config.yaml")
 
-    config = BaseConfig()
-    config.load_config()
+    config = Config()
+    config.load_config(config=config_from_yaml)
 
     return config
 
 
-def load_config_from_yaml(config_file_path):
+def load_config_from_yaml(config_file_path: str = None):
+    """Load configuration from a YAML file
+    by reading it.
+
+    Args:
+        config_file_path (str): file path of config file
+
+    Returns:
+        dict: config as dictionary
+    """
     config = read_config(config_file_path)
     return config
 
 
 def read_config(config_file_path):
+    """Read configuration from any place, for now only
+    from YAML file.
+
+    Args:
+        config_file_path (str): file path of config file
+
+    Returns:
+        dict: config as dictionary
+    """
     config = None
-    with open(config_file_path, 'rb') as f:
+    with open(config_file_path, 'rb') as config_file:
         try:
-            config = yaml.load(f, Loader=yaml.FullLoader)
+            config = yaml.load(config_file, Loader=yaml.FullLoader)
         except yaml.YAMLError as err:
             print(err)
 

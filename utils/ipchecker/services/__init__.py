@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-
-import requests as r
+"""IPService class for the parent of IP Checker classes
+"""
+from requests import Response, get
 
 CHECK_URL = None
 
 
-class IPService():
+class IPService:
+    check_url = CHECK_URL
 
     def check(self) -> bool:
         res = self._get_check_url()
@@ -23,4 +25,10 @@ class IPService():
 
     def _get_check_url(self):
         # TODO: Add error control and handling.
-        return r.get(self.check_url)
+        return get(self.check_url)
+
+    def _ip(self, res: Response = None) -> str:
+        return "Not Implemented"
+
+    def _country(self, res: Response = None) -> str:
+        return "Not Implemented"

@@ -1,4 +1,7 @@
-# Torrent.py
+# -*- coding: utf-8 -*-
+"""Torrent data model
+"""
+
 
 class Torrent:
     """

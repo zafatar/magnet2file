@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-#
-# yify-seedr-v2.py
-#
+"""This is the client which interacts with the user
+and collects the input and presents the input from
+different services.
+"""
 from __future__ import print_function
 
 from signal import signal, SIGINT
-from sys import exit
+import sys
+import logging
+import argparse
 
 from utils.ipchecker import IPChecker
 from utils.nordvpn import get_country_list
@@ -13,10 +16,25 @@ from utils.utils import yes_or_no
 
 from config import get_config
 
-from magnet2file.services import Services
-from magnet2file.services.Seedr import Seedr
-from magnet2file.services.ShowRSS import ShowRSS
-from magnet2file.services.Yify import Yify
+from magnet2file.services import Services, ServiceFactory
+
+# Read and load command line params
+parser = argparse.ArgumentParser(description='Magnet2File client')
+parser.add_argument("--debug", help="activate debug mode", action="store_true")
+args = parser.parse_args()
+debug = args.debug
+
+# Prepare and set the logger
+logger = logging.getLogger(__name__)
+logging.basicConfig()
+
+if debug:
+    logger.setLevel(logging.DEBUG)
+    logger.debug("****************************")
+    logger.debug("*** Debug mode is active ***")
+    logger.debug("****************************")
+else:
+    logger.setLevel(logging.INFO)
 
 # Load the config
 config = get_config()
@@ -26,9 +44,17 @@ countries = get_country_list()
 
 
 def handler(signal_received, frame):
+    """This is a handler method which runs with a system signal
+
+    Args:
+        signal_received (Signal): Signal type
+        frame (Frame): Frame which received the signal
+    """
+    logger.info('%s - %s', signal_received, frame)
+
     # Handle any cleanup here
     print('\n\nExiting...\nBye.\n')
-    exit(0)
+    sys.exit()
 
 
 if __name__ == '__main__':
@@ -50,7 +76,7 @@ if __name__ == '__main__':
 
     if not proceed:
         print("OK, quitting...")
-        exit()
+        sys.exit()
 
     # List the available services.
     print("\nAvailable services:")
@@ -58,9 +84,7 @@ if __name__ == '__main__':
 
     for index, service in enumerate(services_as_list):
         index = index + 1
-        print("{} - [{}] - [{}]".format(str(index).rjust(3),
-                                        service.name,
-                                        service.value))
+        print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
 
     selected_service_index = input("\nSelect the service [1..4]: ")
     selected_service = services_as_list[int(selected_service_index) - 1]
@@ -68,18 +92,23 @@ if __name__ == '__main__':
     print(f"\nSelected service: {selected_service}")
 
     # Pick the service and then run it.
-    service = None
-    seedr_service = Seedr({
-        'email': config.SEEDR_USERNAME,
-        'password': config.SEEDR_PASSWORD
-    })
+    service = ServiceFactory.get_service(selected_service, config)
+    service = ServiceFactory.get
 
-    if selected_service == Services.YIFY:
-        service = Yify(seedr_service)
-    elif selected_service == Services.SHOWRSS:
-        service = ShowRSS(seedr_service)
-    elif selected_service == Services.SEEDR:
-        service = seedr_service
+    # dependency for the Yify and ShowRSS
+    # seedr_service = Seedr({
+    #     'email': config.SEEDR_USERNAME,
+    #     'password': config.SEEDR_PASSWORD
+    # })
+
+    # if selected_service == Services.YIFY:
+    #     service = Yify(seedr_service)
+    # elif selected_service == Services.SHOWRSS:
+    #     service = ShowRSS(seedr_service)
+    # elif selected_service == Services.SEEDR:
+    #     service = seedr_service
+    # else:
+    #     raise(f"Unsupported service: {selected_service}")
 
     if service:
         service.run()
