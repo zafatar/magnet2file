@@ -7,10 +7,10 @@ from urllib.parse import quote
 from lxml import html
 from utils.utils import update_progress
 
-from yifyseedr.services import Services
-from yifyseedr.services.Seedr import Seedr
-from yifyseedr.models.Film import Film
-from yifyseedr.models.Torrent import Torrent
+from magnet2file.services import Services
+from magnet2file.services.Seedr import Seedr
+from magnet2file.models.Film import Film
+from magnet2file.models.Torrent import Torrent
 
 MAIN_URL = "https://yts.mx"
 MAX_NUMBER = 20
