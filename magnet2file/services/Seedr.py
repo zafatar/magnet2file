@@ -1,9 +1,11 @@
-# Seedr.py
-
+# -*- coding: utf-8 -*-
+#
+# services/Seedr.py
+#
 import requests
 import sys
 
-from yifyseedr.services import Services
+from magnet2file.services import Services
 
 from utils.utils import pprint_dict
 
@@ -39,11 +41,11 @@ class Seedr:
         # list folders.
         folder_dict = self.get_folders_list()
 
-        if int(selected_action) == 1:
-            print(f"\nSelected action: {available_actions.get(int(selected_action))}")
+        print(f"\nSelected action: {available_actions.get(int(selected_action))}")
 
-            Seedr.print_folders(folder_dict)
+        Seedr.print_folders(folder_dict)
 
+        if int(selected_action) == 1:     # Download
             folder_number = input(f"\nSelect a folder for details [1..{len(folder_dict)}] :")
             selected_folder = folder_dict[int(folder_number)]
 
@@ -52,7 +54,7 @@ class Seedr:
             folder_dict = self.get_folders_list(folder_id=selected_folder.get('id'))
             Seedr.print_folders(folder_dict)
 
-            file_number = input(f"\nSelect a file to download [1..{len(folder_dict)}] :")
+            file_number = input(f"\nSelect a file to download [1..{len(folder_dict)}]: ")
             selected_file = folder_dict[int(file_number)]
 
             pprint_dict(selected_file)
@@ -73,10 +75,10 @@ class Seedr:
                           file_name=selected_file.get('name'),
                           folder=selected_folder)
 
-        elif int(selected_action) == 2:
-            folder_number = input(f"Select a folder to delete [1..{len(folder_dict)}] :")
+        elif int(selected_action) == 2:    # Delete
+            folder_number = input(f"\nSelect a folder to delete [1..{len(folder_dict)}]: ")
             selected_folder = folder_dict[int(folder_number)]
-            self.delete_folder(folder_id=selected_folder.get('id'))
+            self.delete_folder(folder=selected_folder)
 
     def add_file_from_magnet(self, magnet_link):
         url = "https://www.seedr.cc/rest/torrent/magnet"
@@ -158,7 +160,7 @@ class Seedr:
         if response.status_code != 200:
             print("Error occurred while deleting folder: " + response.content)
 
-        print(f"\nFolder {folder.get('name')} deleted.\n")
+        print(f"\nFolder `{folder.get('name')}` deleted.\n")
 
     @staticmethod
     def print_folders(folder_dict):
