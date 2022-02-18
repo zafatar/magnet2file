@@ -1,12 +1,11 @@
-# src/utils/client.py
-
-import requests
-import config
+# -*- coding: utf-8 -*-
+"""Library for the http client
+"""
 
 
 class Client:
     """
-    Generic
+    Simple HTTP Client (WIP)
     """
     @staticmethod
     def http_headers(content_type=None, auth_required=False):
@@ -15,7 +14,7 @@ class Client:
             headers['content-type'] = content_type
 
         if auth_required:
-            headers['Authorization'] = Client.auth_header()
+            headers['Authorization'] = None
 
         return headers
 
@@ -23,8 +22,3 @@ class Client:
     def basic_headers():
         return Client.http_headers(auth_required=False,
                                    content_type="application/json")
-
-    @staticmethod
-    def auth_header():
-        # TODO: To be improved.
-        return None
