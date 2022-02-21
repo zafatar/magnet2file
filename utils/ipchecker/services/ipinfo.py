@@ -9,6 +9,9 @@ CHECK_URL = "https://ipinfo.io"
 
 
 class IPInfo(IPService):
+    """IP service class for IPInfo
+    """
+    # pylint: disable=too-few-public-methods
 
     check_url = CHECK_URL
 

@@ -2,9 +2,9 @@
 
 import enum
 
-from utils.ipchecker.services.IfconfigMe import IfconfigMe
-from utils.ipchecker.services.IPInfo import IPInfo
-from utils.ipchecker.services.IPApi import IPApi
+from utils.ipchecker.services.ifconfigme import IfconfigMe
+from utils.ipchecker.services.ipinfo import IPInfo
+from utils.ipchecker.services.ipapi import IPApi
 
 VERSION = '0.0.1'
 

@@ -10,6 +10,9 @@ CHECK_URL = "https://ifconfig.me/ip"
 
 
 class IfconfigMe(IPService):
+    """IP service class for IfconfigMe
+    """
+    # pylint: disable=too-few-public-methods
 
     check_url = CHECK_URL
 
