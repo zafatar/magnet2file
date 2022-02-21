@@ -17,7 +17,7 @@ from utils.utils import yes_or_no
 from config import get_config
 
 from magnet2file.services import Services
-from magnet2file.services.ServiceFactory import ServiceFactory
+from magnet2file.services.service_factory import ServiceFactory
 
 # Read and load command line params
 parser = argparse.ArgumentParser(description='Magnet2File client')

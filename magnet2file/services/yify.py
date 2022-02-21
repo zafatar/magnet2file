@@ -8,9 +8,9 @@ from lxml import html
 from utils.utils import update_progress
 
 from magnet2file.services import Services
-from magnet2file.services.Seedr import Seedr
-from magnet2file.models.Film import Film
-from magnet2file.models.Torrent import Torrent
+from magnet2file.services.seedr import Seedr
+from magnet2file.models.film import Film
+from magnet2file.models.torrent import Torrent
 
 MAIN_URL = "https://yts.mx"
 MAX_NUMBER = 20

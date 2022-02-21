@@ -3,10 +3,10 @@
 import requests
 from lxml import html
 
-from magnet2file.models.Film import Film
-from magnet2file.models.Torrent import Torrent
+from magnet2file.models.film import Film
+from magnet2file.models.torrent import Torrent
 from magnet2file.services import Services
-from magnet2file.services.Seedr import Seedr
+from magnet2file.services.seedr import Seedr
 
 
 MAIN_URL = "https://showrss.info"
