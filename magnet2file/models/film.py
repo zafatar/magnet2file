@@ -15,6 +15,4 @@ class Film:
         self.torrents = []
 
     def __repr__(self):
-        return '<Film.title {} ({}) [{}]>'.format(self.title,
-                                                  self.year,
-                                                  self.rating)
+        return f'<Film: {self.title} ({self.year}) [{self.rating}]>'

@@ -7,12 +7,10 @@ class Torrent:
     """
     Torrent class
     """
-    def __init__(self, type=None, size=None, magnet=None):
-        self.type = type
+    def __init__(self, resolution=None, size=None, magnet=None):
+        self.resolution = resolution
         self.size = size
         self.magnet = magnet
 
     def __repr__(self):
-        return "<Torrent {} - {} - {}".format(self.type,
-                                              self.size,
-                                              self.magnet)
+        return f'<Torrent: {self.resolution} ({self.size}) - {self.magnet}'

@@ -90,7 +90,7 @@ class Yify:
                 torrent_size = torrent.xpath('.//p[@class="quality-size"]/text()')
                 magnet_link = torrent.xpath('.//a[contains(@class, "magnet")]//@href')
 
-                torrent = Torrent(type=torrent_type[0], size=torrent_size[1], magnet=magnet_link)
+                torrent = Torrent(resolution=torrent_type[0], size=torrent_size[1], magnet=magnet_link)
                 film.torrents.append(torrent)
 
                 # print("{} - {} - {}".format(str(torrent_type[0]).rjust(10), torrent_size[1], magnet_link))
@@ -138,7 +138,7 @@ class Yify:
                 torrent_size = torrent.xpath('.//p[@class="quality-size"]/text()')
                 magnet_link = torrent.xpath('.//a[contains(@class, "magnet")]//@href')
 
-                torrent = Torrent(type=torrent_type[0], size=torrent_size[1], magnet=magnet_link)
+                torrent = Torrent(resolution=torrent_type[0], size=torrent_size[1], magnet=magnet_link)
                 film.torrents.append(torrent)
 
                 # print("{} - {} - {}".format(str(torrent_type[0]).rjust(10), torrent_size[1], magnet_link))
