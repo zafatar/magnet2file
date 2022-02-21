@@ -80,7 +80,7 @@ class ShowRSS:
                     film = Film(title=title, link=None)
 
                     if '1080p' in title:
-                        torrent = Torrent(type='1080p', size=0, magnet=magnet_link)
+                        torrent = Torrent(resolution='1080p', size=0, magnet=magnet_link)
                         film.torrents.append(torrent)
 
                         films[count] = film
