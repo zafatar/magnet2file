@@ -86,11 +86,17 @@ def yes_or_no(question: str = None, default: str = "yes") -> bool:
     else:
         raise ValueError(f"invalid default answer: '{default}'")
 
+    ret = None
     while True:
         choice = input(question + prompt).lower()
         if default is not None and choice == "":
-            return valid[default]
+            ret = valid[default]
         elif choice in valid:
-            return valid[choice]
+            ret = valid[choice]
         else:
             print("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
+
+        if ret is not None:
+            break
+
+    return ret
