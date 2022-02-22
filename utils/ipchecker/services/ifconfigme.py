@@ -17,8 +17,8 @@ class IfconfigMe(IPService):
     check_url = CHECK_URL
 
     def _ip(self, res: Response = None) -> str:
-        ip = str(res.content.decode("utf-8"))
-        return ip
+        ip_value = str(res.content.decode("utf-8"))
+        return ip_value
 
     def _country(self, res: Response = None) -> str:
         country = str(res.content.decode("utf-8"))

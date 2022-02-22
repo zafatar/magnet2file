@@ -16,8 +16,8 @@ class IPApi(IPService):
     check_url = CHECK_URL
 
     def _ip(self, res: Response = None) -> str:
-        ip = str(res.json().get("query"))
-        return ip
+        ip_value = str(res.json().get("query"))
+        return ip_value
 
     def _country(self, res: Response = None) -> str:
         country = str(res.json().get("countryCode"))

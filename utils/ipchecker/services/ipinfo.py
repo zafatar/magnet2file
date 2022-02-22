@@ -15,9 +15,12 @@ class IPInfo(IPService):
 
     check_url = CHECK_URL
 
+    def __init__(self, service: str = None):
+        self.service = service
+
     def _ip(self, res: Response = None) -> str:
-        ip = str(res.json().get("ip"))
-        return ip
+        ip_value = str(res.json().get("ip"))
+        return ip_value
 
     def _country(self, res: Response = None) -> str:
         country = str(res.json().get("country"))
