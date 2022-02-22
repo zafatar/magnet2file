@@ -1,6 +1,8 @@
+"""
+This is init module for magnet2file
+"""
+from .models.film import Film
+from .models.torrent import Torrent
 
-from .models.Film import Film
-from .models.Torrent import Torrent
-
-from .services.Seedr import Seedr
-from .services.Yify import Yify, MAX_NUMBER
+from .services.seedr import Seedr
+from .services.yify import Yify, MAX_NUMBER
