@@ -3,6 +3,19 @@
 """
 
 
+def sanitize_search_string(search_string: str = None) -> str:
+    """Simple string cleaning (only spaces)
+
+    Args:
+        search_string (str, optional): string to be cleaned.
+        Defaults to None.
+
+    Returns:
+        str: cleaned string
+    """
+    return ' '.join(search_string.split())
+
+
 def update_progress(count: int = 0, total: int = 100):
     """This generates a progress bar with '#' and prints the same line
 
