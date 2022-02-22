@@ -54,3 +54,18 @@ class Service(ABC):
                 max_title_length = len(film.title)
 
         return max_title_length
+
+
+class SourceService(Service):
+    """Service class for the source services (Yify, ShowRSS)
+    """
+    def __init__(self, seedr_service: Service = None):
+        """Default constructor of YIFY / ShowRSS
+
+        Args:
+            seedr_service (Seedr): service dependency
+        """
+        if seedr_service is None:
+            raise Exception('Seedr service required')
+
+        self.seedr_service = seedr_service

@@ -11,8 +11,7 @@ from lxml import html
 from lxml.html import HtmlElement
 from utils.utils import update_progress, sanitize_search_string
 
-from magnet2file.services import Services, Service
-from magnet2file.services.seedr import Seedr
+from magnet2file.services import Services, Service, SourceService
 from magnet2file.models.film import Film
 from magnet2file.models.torrent import Torrent
 
@@ -20,23 +19,12 @@ MAIN_URL = "https://yts.mx"
 MAX_NUMBER = 20
 
 
-class Yify(Service):
+class Yify(SourceService):
     """
     Yify class
     """
     CODE = Services.YIFY
     seedr_service = None
-
-    def __init__(self, seedr_service: Seedr = None):
-        """Default constructor of YIFY
-
-        Args:
-            seedr_service (Seedr): service dependency
-        """
-        if seedr_service is None:
-            raise Exception('Seedr service required')
-
-        self.seedr_service = seedr_service
 
     def run(self):
         """

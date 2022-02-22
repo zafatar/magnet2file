@@ -10,8 +10,7 @@ from lxml import html
 from lxml.html import HtmlElement
 from utils.utils import sanitize_search_string
 
-from magnet2file.services import Services, Service
-from magnet2file.services.seedr import Seedr
+from magnet2file.services import Services, Service, SourceService
 from magnet2file.models.series import Series
 from magnet2file.models.torrent import Torrent
 
@@ -20,23 +19,12 @@ MAIN_URL = "https://showrss.info"
 MAX_NUMBER = 20
 
 
-class ShowRSS(Service):
+class ShowRSS(SourceService):
     """
     ShowRSS.info class
     """
     CODE = Services.SHOWRSS
     seedr_service = None
-
-    def __init__(self, seedr_service: Seedr = None):
-        """Default constructor of ShowRSS
-
-        Args:
-            seedr_service (Seedr): service dependency
-        """
-        if seedr_service is None:
-            raise Exception('Seedr service required')
-
-        self.seedr_service = seedr_service
 
     def run(self):
         """
