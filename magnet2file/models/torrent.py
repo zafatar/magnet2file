@@ -7,7 +7,10 @@ class Torrent:
     """
     Torrent class
     """
-    def __init__(self, resolution=None, size=None, magnet=None):
+    # pylint: disable=too-few-public-methods
+
+    def __init__(self, title=None, resolution=None, size=None, magnet=None):
+        self.title = title
         self.resolution = resolution
         self.size = size
         self.magnet = magnet

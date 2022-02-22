@@ -7,6 +7,8 @@ class Film:
     """
     Film class
     """
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, title=None, year=None, link=None, rating=None):
         self.title = title
         self.year = year

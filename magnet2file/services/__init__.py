@@ -3,6 +3,7 @@
 and their unique code names with values (websites).
 """
 import enum
+from abc import ABC, abstractmethod
 
 
 class Services(enum.Enum):
@@ -22,3 +23,34 @@ class Services(enum.Enum):
             list: available services as list
         """
         return list(Services)
+
+
+class Service(ABC):
+    """Abstract class for the Service classes.
+    """
+    CODE = None
+
+    @abstractmethod
+    def run(self):
+        """
+        Service run instruction
+        """
+
+    @staticmethod
+    def max_title_size(films: list = None) -> int:
+        """This calculates the max title length based on the
+        given list of films as dict.
+
+        Args:
+            films (list, optional): list of films. Defaults to None.
+
+        Returns:
+            int: max length of title in the given films.
+        """
+        max_title_length = 0
+
+        for film in films:
+            if len(film.title) > max_title_length:
+                max_title_length = len(film.title)
+
+        return max_title_length

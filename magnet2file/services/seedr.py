@@ -5,8 +5,8 @@
 """Seedr class and functions to interact with Seedr data
 coming from its API.
 """
-import requests
 import sys
+import requests
 
 from magnet2file.services import Services
 
@@ -22,10 +22,18 @@ class Seedr:
     CODE = Services.SEEDR
 
     def __init__(self, data):
+        """Default constructor of Seedr
+
+        Args:
+            data (dict): dict containing email and password
+        """
         self.email = data.get('email')
         self.password = data.get('password')
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Run instructions for the Seedr service
+        """
         available_actions = {
             1: 'Download',
             2: 'Delete'
@@ -46,7 +54,8 @@ class Seedr:
         # list folders.
         folder_dict = self.get_folders_list()
 
-        print(f"\nSelected action: {available_actions.get(int(selected_action))}")
+        selected_action_type = available_actions.get(int(selected_action))
+        print(f"\nSelected action: {selected_action_type}")
 
         Seedr.print_folders(folder_dict)
 
@@ -86,7 +95,15 @@ class Seedr:
             selected_folder = folder_dict[int(folder_number)]
             self.delete_folder(folder=selected_folder)
 
-    def add_file_from_magnet(self, magnet_link):
+    def add_file_from_magnet(self, magnet_link: str = None) -> int:
+        """Add file to the Seedr account by using a magnet link
+
+        Args:
+            magnet_link (str): A link starting with magnet://
+
+        Returns:
+            int: file id from Seedr
+        """
         url = "https://www.seedr.cc/rest/torrent/magnet"
         auth = (self.email, self.password)
         response = requests.post(url, data={'magnet': magnet_link}, auth=auth)
@@ -98,7 +115,15 @@ class Seedr:
         print(ret)
         return ret.get('user_torrent_id')
 
-    def get_folders_list(self, folder_id=None):
+    def get_folders_list(self, folder_id: int = None) -> dict:
+        """Retrieve the list of folders from the Seedr.
+
+        Args:
+            folder_id (int, optional): _description_. Defaults to None.
+
+        Returns:
+            dict: list of folders in an ordered way.
+        """
         url = "https://www.seedr.cc/rest/folder"
         if folder_id is not None:
             url = url + "/" + str(folder_id)
@@ -124,19 +149,33 @@ class Seedr:
 
         return folders
 
-    def get_file(self, file_id=None, file_name=None, folder='.'):
+    def get_file(self,
+                 file_id: int = 0,
+                 file_name: str = None,
+                 folder: str = '.'):
+        """This method downloads a file from Seedr into a local folder.
+        It displays a progress bar during the download operation.
+
+        Args:
+            file_id (int, optional): ID of the file to be downloaded.
+                Defaults to 0.
+            file_name (str, optional): filename to be saved as.
+                Defaults to None.
+            folder (str, optional): Folder the file to be downloaded in.
+                Defaults to '.'.
+        """
         url = "https://www.seedr.cc/rest/file"
         if file_id is not None:
             url = url + "/" + str(file_id)
 
         auth = (self.email, self.password)
 
-        with open(folder + '/' + file_name, 'wb') as f:
+        with open(folder + '/' + file_name, 'wb') as local_file:
             response = requests.get(url, auth=auth, stream=True)
             total = response.headers.get('content-length')
 
             if total is None:
-                f.write(response.content)
+                local_file.write(response.content)
             else:
                 downloaded = 0
                 total = int(total)
@@ -144,7 +183,7 @@ class Seedr:
 
                 for data in response.iter_content(chunk_size=max_chunk_size):
                     downloaded += len(data)
-                    f.write(data)
+                    local_file.write(data)
                     # Calculate the done and todo parts and
                     # presents as progress bar.
                     done = int(50*downloaded/total)
@@ -157,9 +196,13 @@ class Seedr:
 
         print(f"\nFile `{file_name}` downloaded into `{folder}.`")
 
-        return
+    def delete_folder(self, folder: dict = None) -> None:
+        """This method delete a folder from Seed with a given folder data.
 
-    def delete_folder(self, folder: dict = {}):
+        Args:
+            folder (dict, optional): data for the folder to be deleted.
+                Defaults to None.
+        """
         url = "https://www.seedr.cc/rest/folder"
 
         if 'id' in folder and folder.get('id') is not None:
@@ -176,7 +219,13 @@ class Seedr:
         print(f"\nFolder `{folder.get('name')}` deleted.\n")
 
     @staticmethod
-    def print_folders(folder_dict):
+    def print_folders(folder_dict: dict = None) -> None:
+        """Print the folder with its metadata.
+
+        Args:
+            folder_dict (dict, optional): Folder whose metadata to be printed.
+                Defaults to None.
+        """
         max_title_length = 0
 
         for count, folder in folder_dict.items():
@@ -192,4 +241,4 @@ class Seedr:
             print(f"{padded_count} - [{folder_id}] - {padded_folder_name}")
 
     def __repr__(self):
-        return '<Seedr.email {}>'.format(self.email)
+        return f'<Seedr.email {self.email}>'
