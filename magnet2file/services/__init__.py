@@ -14,6 +14,7 @@ class Services(enum.Enum):
     SHOWRSS = "showrss.info"
     SEEDR = "seedr.com"
     OPENSUBTITLES = "opensubtitles.org"
+    EZTV = "eztv.ro"
 
     @staticmethod
     def as_array() -> list:
@@ -57,10 +58,10 @@ class Service(ABC):
 
 
 class SourceService(Service):
-    """Service class for the source services (Yify, ShowRSS)
+    """Service class for the source services (Yify, ShowRSS, Eztv)
     """
     def __init__(self, seedr_service: Service = None):
-        """Default constructor of YIFY / ShowRSS
+        """Default constructor of YIFY / ShowRSS / Eztv
 
         Args:
             seedr_service (Seedr): service dependency

@@ -7,6 +7,7 @@ from magnet2file.services import Services
 from magnet2file.services.seedr import Seedr
 from magnet2file.services.showrss import ShowRSS
 from magnet2file.services.yify import Yify
+from magnet2file.services.eztv import Eztv
 
 
 class ServiceFactory:
@@ -43,6 +44,8 @@ class ServiceFactory:
             service = Yify(seedr_service)
         elif service_code == Services.SHOWRSS:
             service = ShowRSS(seedr_service)
+        elif service_code == Services.EZTV:
+            service = Eztv(seedr_service)
         elif service_code == Services.SEEDR:
             service = seedr_service
         else:
