@@ -16,4 +16,4 @@ class Torrent:
         self.magnet = magnet
 
     def __repr__(self):
-        return f'<Torrent: {self.resolution} ({self.size}) - {self.magnet}'
+        return f'<Torrent: {self.resolution} ({self.size}) - {self.title} = {self.magnet[0:50]}>'  # noqa: E501
