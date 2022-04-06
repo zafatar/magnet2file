@@ -87,7 +87,7 @@ if __name__ == '__main__':
         index = index + 1
         print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
 
-    selected_service_index = input("\nSelect the service [1..4]: ")
+    selected_service_index = input(f"\nSelect the service [1..{len(services_as_list)}]: ")
     selected_service = services_as_list[int(selected_service_index) - 1]
 
     print(f"\nSelected service: {selected_service}")
