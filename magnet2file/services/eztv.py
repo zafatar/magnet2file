@@ -11,7 +11,7 @@ from lxml import html
 from lxml.html import HtmlElement
 from utils.utils import sanitize_search_string
 
-from magnet2file.services import Services, Service, SourceService
+from magnet2file.services import Services, SourceService
 from magnet2file.models.torrent import Torrent
 
 MAIN_URL = "https://eztv.ro"
@@ -41,10 +41,7 @@ class Eztv(SourceService):
             film_number = input(f"\nSelect an episode to download [1..{no_torrents}]: ")
             selected_torrent = torrents[int(film_number) - 1]
 
-            if selected_torrent.resolution.startswith('1080p'):
-                self.seedr_service.add_file_from_magnet(selected_torrent.magnet)
-            else:
-                print("The resolution of the selected episode is not 1080p. Please try again.")
+            self.save_torrent_to_seedr(torrent=selected_torrent)
         else:
             print(f"No series found for `{search_string}`\n")
 
@@ -80,23 +77,8 @@ class Eztv(SourceService):
         return torrents
 
     @staticmethod
-    def print_torrents(torrents: list = None) -> None:
-        """This method prints the given episodes dict.
-
-        Args:
-            series (dict): list of episodes as dict.
-        """
-        max_title_length = Service.max_title_size(films=torrents)
-
-        for index, film in enumerate(torrents, 1):
-            padded_index = str(index).rjust(3)
-            padded_title = str(film.title).ljust(max_title_length)
-
-            print(f'{padded_index} - {padded_title}')
-
-    @staticmethod
     def _extract_torrent(torrent_node: HtmlElement = None) -> Torrent:
-        """This method extracts Film instance from given HtmlElement instance.
+        """This method extracts Torrent instance from given HtmlElement instance.
 
         Args:
             series_node (HtmlElement, optional): html node containing
@@ -107,10 +89,11 @@ class Eztv(SourceService):
         """
         magnet_link = torrent_node.xpath(".//td/a[starts-with(@href,'magnet')]/@href")[0]
         title = torrent_node.xpath(".//td/a[@class='epinfo']")[0].text_content().strip()
+        resolution = '1080p'
+        size = '0 Gb'
 
-        torrent = Torrent(title=title,
-                          resolution='1080p',
-                          size=0,
-                          magnet=magnet_link)
-
-        return torrent
+        # TODO: get the proper resolution and size if possible.
+        return Torrent(title=title,
+                       resolution=resolution,
+                       size=size,
+                       magnet=magnet_link)

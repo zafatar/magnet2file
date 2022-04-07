@@ -46,16 +46,13 @@ class ShowRSS(SourceService):
 
             ShowRSS.get_series_torrents(series=selected_series)
 
-            ShowRSS.print_episodes(selected_series.torrents)
+            ShowRSS.print_torrents(torrents=selected_series.torrents)
 
             no_torrents = len(selected_series.torrents)
             film_number = input(f"\nSelect an episode to download [1..{no_torrents}]: ")
             selected_torrent = selected_series.torrents[int(film_number) - 1]
 
-            if selected_torrent.resolution.startswith('1080p'):
-                self.seedr_service.add_file_from_magnet(selected_torrent.magnet)
-            else:
-                print("The resolution of the selected episode is not 1080p. Please try again.")
+            self.save_torrent_to_seedr(torrent=selected_torrent)
         else:
             print(f"No series found for `{search_string}`\n")
 
@@ -105,11 +102,6 @@ class ShowRSS(SourceService):
 
         for link_node in links:
             torrent = ShowRSS._extract_torrent(torrent_node=link_node)
-
-            # if '1080p' in film.title:
-            #     torrent = Torrent(resolution='1080p',
-            #                         size=0,
-            #                         magnet=film.link)
             series.torrents.append(torrent)
 
         print(f"\n{len(series.torrents)} episodes/links found in `{series.title}`\n")
@@ -121,26 +113,11 @@ class ShowRSS(SourceService):
         Args:
             series (dict): list of series as dict.
         """
-        max_title_length = Service.max_title_size(films=series)
+        max_title_length = Service.max_title_size(entities=series)
 
         for index, serie in enumerate(series):
             padded_title = str(serie.title).ljust(max_title_length)
             print(f'{str(index + 1).rjust(3)} - {padded_title}')
-
-    @staticmethod
-    def print_episodes(episodes: list = None) -> None:
-        """This method prints the given episodes dict.
-
-        Args:
-            series (dict): list of episodes as dict.
-        """
-        max_title_length = Service.max_title_size(films=episodes)
-
-        for index, film in enumerate(episodes, 1):
-            padded_index = str(index).rjust(3)
-            padded_title = str(film.title).ljust(max_title_length)
-
-            print(f'{padded_index} - {padded_title}')
 
     @staticmethod
     def _extract_series(series_node: HtmlElement = None) -> Series:
@@ -162,7 +139,7 @@ class ShowRSS(SourceService):
 
     @staticmethod
     def _extract_torrent(torrent_node: HtmlElement = None) -> Torrent:
-        """This method extracts Film instance from given HtmlElement instance.
+        """This method extracts Torrent instance from given HtmlElement instance.
 
         Args:
             series_node (HtmlElement, optional): html node containing
@@ -173,10 +150,11 @@ class ShowRSS(SourceService):
         """
         magnet_link = torrent_node.xpath('.//@href')
         title = torrent_node.text_content().strip()
+        resolution = '1080p'
+        size = '0 Gb'
 
-        torrent = Torrent(title=title,
-                          resolution='1080p',
-                          size=0,
-                          magnet=magnet_link)
-
-        return torrent
+        # TODO: get the proper resolution and size if possible.
+        return Torrent(title=title,
+                       resolution=resolution,
+                       size=size,
+                       magnet=magnet_link)
