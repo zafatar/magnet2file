@@ -63,10 +63,13 @@ class Seedr:
             folder_number = input(f"\nSelect a folder for details [1..{len(folder_dict)}] :")
             selected_folder = folder_dict[int(folder_number)]
 
+            print(f"\n\nSelected folder: \"{selected_folder.get('name')}\"\n")
             pprint_dict(selected_folder)
 
             folder_id = selected_folder.get('id')
             folder_dict = self.get_folders_list(folder_id)
+
+            print(f"\n\nList of files in \"{selected_folder.get('name')}\":\n")
             Seedr.print_folders(folder_dict)
 
             file_number = input(f"\nSelect a file to download [1..{len(folder_dict)}]: ")

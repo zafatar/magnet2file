@@ -63,7 +63,7 @@ def pprint_dict(dict_to_print: dict = None) -> None:
             max_title_length = len(key)
 
     for key, value in dict_to_print.items():
-        print("\t%s - %s", str(key).ljust(max_title_length), value)
+        print("\t%s - %s" % (str(key).ljust(max_title_length), value))
 
 
 def yes_or_no(question: str = None, default: str = "yes") -> bool:
