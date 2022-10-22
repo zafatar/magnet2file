@@ -5,6 +5,10 @@
 """Yify module containingclass and functions to interact with Seedr data
 coming from its API.
 """
+from __future__ import annotations
+
+from typing import List
+
 from urllib.parse import quote
 import requests
 from lxml import html
@@ -51,28 +55,27 @@ class Yify(SourceService):
             print(f"No film found for `{search_string}`\n")
 
     @staticmethod
-    def search_movies(search_string: str = None) -> dict:
+    def search_movies(search_string: str = None) -> List:
         """This method searches the movies by using the search string.
 
         Args:
             search_string (str): search string. Default to None.
 
         Returns:
-            dict: list of Film instances as dict
+            List: list of Film instances as dict
         """
         search_url = f'{MAIN_URL}/browse-movies/{quote(search_string)}/all/all/0/latest/0/all'
         response = requests.get(search_url)
+
+        print(response.status_code)
+
         tree = html.fromstring(response.content)
 
         # Keep the track of how many results found.
-        number_of_movies = 0
-        movies_found = tree.xpath('//h2/b/text()')
-
-        if movies_found[0] is not None:
-            pieces = movies_found[0].split(' ')
-            number_of_movies = int(pieces[0])
-
         film_nodes = tree.xpath('//div[contains(@class, "browse-movie-wrap")]')
+        number_of_movies = len(film_nodes)
+
+        print(f"{number_of_movies} movies found for '{search_string}'.")
 
         films = []
         for film_node in film_nodes:
