@@ -14,9 +14,9 @@ class Services(enum.Enum):
     """
     YIFY = "yts.mx"
     SHOWRSS = "showrss.info"
+    EZTV = "eztv.ro"
     SEEDR = "seedr.com"
     OPENSUBTITLES = "opensubtitles.org"
-    EZTV = "eztv.ro"
 
     @staticmethod
     def as_array() -> list:
@@ -26,6 +26,18 @@ class Services(enum.Enum):
             list: available services as list
         """
         return list(Services)
+
+    @staticmethod
+    def max_service_name_length() -> int:
+        """
+        This returns the maximum title length within the Services
+        """
+        max_service_name_length = 0
+        for index, service in enumerate(Services.as_array()):
+            if len(service.name) > max_service_name_length:
+                max_service_name_length = len(service.name)
+
+        return max_service_name_length
 
 
 class Service(ABC):

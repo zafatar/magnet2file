@@ -83,9 +83,11 @@ if __name__ == '__main__':
     print("\nAvailable services:")
     services_as_list = Services.as_array()
 
+    max_service_name_length = Services.max_service_name_length()
+
     for index, service in enumerate(services_as_list):
         index = index + 1
-        print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
+        print(f"{str(index).rjust(3)} - {service.name.ljust(max_service_name_length)} - [{service.value}]")
 
     selected_service_index = input(f"\nSelect the service [1..{len(services_as_list)}]: ")
     selected_service = services_as_list[int(selected_service_index) - 1]
