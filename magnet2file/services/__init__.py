@@ -12,6 +12,7 @@ class Services(enum.Enum):
     """Services class for the available services
     as Enum.
     """
+
     YIFY = "yts.mx"
     SHOWRSS = "showrss.info"
     SEEDR = "seedr.com"
@@ -29,8 +30,8 @@ class Services(enum.Enum):
 
 
 class Service(ABC):
-    """Abstract class for the Service classes.
-    """
+    """Abstract class for the Service classes."""
+
     CODE = None
 
     @abstractmethod
@@ -61,8 +62,8 @@ class Service(ABC):
 
 
 class SourceService(Service):
-    """Service class for the source services (Yify, ShowRSS, Eztv)
-    """
+    """Service class for the source services (Yify, ShowRSS, Eztv)"""
+
     def __init__(self, seedr_service: Service = None):
         """Default constructor of YIFY / ShowRSS / Eztv
 
@@ -70,7 +71,7 @@ class SourceService(Service):
             seedr_service (Seedr): service dependency
         """
         if seedr_service is None:
-            raise Exception('Seedr service required')
+            raise Exception("Seedr service required")
 
         self.seedr_service = seedr_service
 
@@ -87,11 +88,11 @@ class SourceService(Service):
             padded_index = str(index).rjust(3)
             padded_title = str(film.title).ljust(max_title_length)
 
-            print(f'{padded_index} - {padded_title}')
+            print(f"{padded_index} - {padded_title}")
 
-    def save_torrent_to_seedr(self,
-                              torrent: Torrent = None,
-                              only1080p: bool = True) -> None:
+    def save_torrent_to_seedr(
+        self, torrent: Torrent = None, only1080p: bool = True
+    ) -> None:
         """This method saves the given Torrent into seedr service.
 
         Args:
@@ -104,7 +105,9 @@ class SourceService(Service):
             _type_: _description_
         """
         # TODO: To be extended
-        if only1080p and torrent.resolution.startswith('1080p'):
+        if only1080p and torrent.resolution.startswith("1080p"):
             self.seedr_service.add_file_from_magnet(torrent.magnet)
         else:
-            print("The resolution of the selected episode is not 1080p. Please try again.")
+            print(
+                "The resolution of the selected episode is not 1080p. Please try again."
+            )
