@@ -10,6 +10,7 @@ class Config:
     """
     Base configuration class
     """
+
     # pylint: disable=too-many-instance-attributes
 
     DEBUG = True
@@ -21,30 +22,28 @@ class Config:
     VPN_USERNAME = None
     VPN_PASSWORD = None
 
-    def load_config(self, config: dict = None):
+    def load_config(self, config: dict):
         """load the config values from the global variable
         into the Config class attributes.
         """
-        # pylint: disable=invalid-name
-
         self.DEBUG = True
         self.TESTING = False
-        self.IPCHECKER_SERVICE = config['ipchecker_service']
-        self.SEEDR_USERNAME = config['seedr']['username']
-        self.SEEDR_PASSWORD = config['seedr']['password']
-        self.SEEDR_API_URL = config['seedr']['api']['url']
-        self.VPN_USERNAME = config['vpn']['username']
-        self.VPN_PASSWORD = config['vpn']['password']
+        self.IPCHECKER_SERVICE = config["ipchecker_service"]
+        self.SEEDR_USERNAME = config["seedr"]["username"]
+        self.SEEDR_PASSWORD = config["seedr"]["password"]
+        self.SEEDR_API_URL = config["seedr"]["api"]["url"]
+        self.VPN_USERNAME = config["vpn"]["username"]
+        self.VPN_PASSWORD = config["vpn"]["password"]
 
     def __repr__(self) -> str:
         return f"<Config: debug: {self.DEBUG}, testing: {self.TESTING}>"
 
 
-def get_config():
-    """
-    Configuration object by environment name
+def get_config() -> Config:
+    """_summary_
 
-    :return: config object
+    Returns:
+        _type_: _description_
     """
     config_from_yaml = load_config_from_yaml("config.yaml")
 
@@ -82,7 +81,7 @@ def read_config(config_file_path):
         dict: config as dictionary
     """
     config = None
-    with open(config_file_path, 'rb') as config_file:
+    with open(config_file_path, "rb") as config_file:
         try:
             config = yaml.load(config_file, Loader=yaml.FullLoader)
         except yaml.YAMLError as err:

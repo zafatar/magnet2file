@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""This is the client which interacts with the user
+"""
+This is the client which interacts with the user
 and collects the input and presents the input from
 different services.
 """
@@ -45,17 +46,17 @@ config = get_config()
 countries = get_country_list()
 
 
-if __name__ == "__main__":
-    # Tell Python to run the handler() function when SIGINT is recieved
-    add_sigint_handler()
-
+def main():
+    """
+    Main function
+    """
     # Check the connection IP and location.
-    ipchecker = IPChecker(service=config.IPCHECKER_SERVICE)
+    ipchecker = IPChecker()
 
-    curr_conn = ipchecker.check()
-    country = curr_conn.get("country")
-    country_name = countries[curr_conn.get("country")].get("name")
-    ip = curr_conn.get("ip")
+    curr_result = ipchecker.check()
+    country = curr_result.get("country")
+    country_name = countries[curr_result.get("country")].get("name")
+    ip = curr_result.get("ip")
 
     print(f"Country: {country_name} ({country}) ({ip})")
 
@@ -86,3 +87,11 @@ if __name__ == "__main__":
 
     if service:
         service.run()
+
+
+if __name__ == "__main__":
+    # Tell Python to run the handler() function when SIGINT is received
+    add_sigint_handler()
+
+    while True:
+        main()
