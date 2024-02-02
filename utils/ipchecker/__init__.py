@@ -5,29 +5,27 @@ import enum
 from requests import Response
 
 from utils.ipchecker.services.ifconfigme import IfconfigMe
+from utils.ipchecker.services.ifconfigco import IfconfigCo
 from utils.ipchecker.services.ipinfo import IPInfo
 from utils.ipchecker.services.ipapi import IPApi
 
-VERSION = '0.0.1'
+VERSION = "0.0.1"
 
 
 class Services(enum.Enum):
-    """Available services as enum list
-    """
-    IPINFO = 'ipinfo.io'
-    IPAPI = 'ip-api.com'
-    IFCONFIG = 'ifconfig.me'
+    """Available services as enum list"""
+
+    IPINFO = "ipinfo.io"
+    IPAPI = "ip-api.com"
+    IFCONFIG = "ifconfig.me"
+    IFCONFIGCO = "ifconfig.co"
 
 
 class IPChecker:
-    """IP Checked service abstract class
-    """
+    """IP Checked service abstract class"""
+
     # pylint: disable=too-few-public-methods
-
-    check_url = None
-
-    def __init__(self, service: str = None):
-        self.service = service
+    service = None
 
     def check(self) -> dict:
         """This method checks the selected service and
@@ -40,29 +38,40 @@ class IPChecker:
         Returns:
             dict: IP and country code as dict.
         """
-        if self.service == Services.IPINFO.value.lower():
-            service = IPInfo()
-        elif self.service == Services.IFCONFIG.value.lower():
-            service = IfconfigMe()
-        elif self.service == Services.IPAPI.value.lower():
-            service = IPApi()
-        else:
-            raise Exception("Undefined IP service requested")
 
-        print(f"IP Checker Service name: {self.service}")
+        # we need to check the services one by one and quit
+        # if we find the current IP and country code
+        try:
+            self.service = IPInfo()
+            result = self.service.check()
+        except Exception:
+            try:
+                self.service = IfconfigMe()
+                result = self.service.check()
+            except Exception:
+                try:
+                    self.service = IfconfigCo()
+                    result = self.service.check()
+                except Exception:
+                    try:
+                        self.service = IPApi()
+                        result = self.service.check()
+                    except Exception:
+                        result = None
 
-        connection = service.check()
-        if connection is None:
+        print(f"IP Checker Service name: {self.service.service_name}")
+
+        if result is None:
             raise Exception("Can't find the current IP")
 
-        return connection
+        return result
 
-    def _ip(self, res: Response = None) -> str:
+    def _ip(self, res: Response) -> str:
         """
         This extracts IP from the service
         """
 
-    def _country(self, res: Response = None) -> str:
+    def _country(self, res: Response) -> str:
         """
         This extracts country code from the service
         """
