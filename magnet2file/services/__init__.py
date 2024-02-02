@@ -16,8 +16,7 @@ class Services(enum.Enum):
     YIFY = "yts.mx"
     SHOWRSS = "showrss.info"
     SEEDR = "seedr.com"
-    OPENSUBTITLES = "opensubtitles.org"
-    EZTV = "eztv.ro"
+    EZTV = "eztvx.to"
 
     @staticmethod
     def as_array() -> list:
