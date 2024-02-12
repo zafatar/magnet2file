@@ -68,7 +68,7 @@ def get_best_available_server(country_id: int = 0):
     country_id = 174
     url = f"{NV_URL}?action={action}&filters={'country_id':{country_id}}"
 
-    ip_json = requests.get(url).text
+    ip_json = requests.get(url, timeout=10).text
 
     result = json.loads(ip_json)
     return result
