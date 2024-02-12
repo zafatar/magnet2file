@@ -106,7 +106,7 @@ class Seedr:
             selected_folder = folder_dict[int(folder_number)]
             self.delete_folder(folder=selected_folder)
 
-    def add_file_from_magnet(self, magnet_link: str = None) -> int:
+    def add_file_from_magnet(self, magnet_link: str) -> int:
         """Add file to the Seedr account by using a magnet link
 
         Args:
@@ -117,16 +117,18 @@ class Seedr:
         """
         url = "https://www.seedr.cc/rest/torrent/magnet"
         auth = (self.email, self.password)
-        response = requests.post(url, data={"magnet": magnet_link}, auth=auth)
+        response = requests.post(
+            url, data={"magnet": magnet_link}, auth=auth, timeout=10
+        )
 
         if response.status_code != 200:
-            print("Error occurred: " + response.content)
+            print("Error occurred: ", response.content)
 
         ret = response.json()
-        print(ret)
+
         return ret.get("user_torrent_id")
 
-    def get_folders_list(self, folder_id: int = None) -> dict:
+    def get_folders_list(self, folder_id: int = 0) -> dict:
         """Retrieve the list of folders from the Seedr.
 
         Args:
@@ -136,12 +138,12 @@ class Seedr:
             dict: list of folders in an ordered way.
         """
         url = "https://www.seedr.cc/rest/folder"
-        if folder_id is not None:
+        if folder_id != 0:
             url = url + "/" + str(folder_id)
 
         auth = (self.email, self.password)
 
-        response = requests.get(url, auth=auth)
+        response = requests.get(url, auth=auth, timeout=10)
 
         if response.status_code != 200:
             print("Error occurred: " + response.content)
@@ -179,7 +181,7 @@ class Seedr:
         auth = (self.email, self.password)
 
         with open(folder + "/" + file_name, "wb") as local_file:
-            response = requests.get(url, auth=auth, stream=True)
+            response = requests.get(url, auth=auth, stream=True, timeout=10)
             total = response.headers.get("content-length")
 
             if total is None:
@@ -204,7 +206,7 @@ class Seedr:
 
         print(f"\nFile `{file_name}` downloaded into `{folder}.`")
 
-    def delete_folder(self, folder: dict = None) -> None:
+    def delete_folder(self, folder: dict) -> None:
         """This method delete a folder from Seed with a given folder data.
 
         Args:
@@ -219,7 +221,7 @@ class Seedr:
 
         auth = (self.email, self.password)
 
-        response = requests.delete(url, auth=auth)
+        response = requests.delete(url, auth=auth, timeout=10)
 
         if response.status_code != 200:
             print("Error occurred while deleting folder: " + response.content)
