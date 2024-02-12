@@ -1,0 +1,2 @@
+class MissingServiceError(Exception):
+    pass

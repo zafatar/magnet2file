@@ -4,6 +4,7 @@ and their unique code names with values (websites).
 """
 import enum
 from abc import ABC, abstractmethod
+from magnet2file.exceptions.services import MissingServiceError
 
 from magnet2file.models.torrent import Torrent
 
@@ -70,7 +71,7 @@ class SourceService(Service):
             seedr_service (Seedr): service dependency
         """
         if seedr_service is None:
-            raise Exception("Seedr service required")
+            raise MissingServiceError("Seedr service required")
 
         self.seedr_service = seedr_service
 
@@ -103,7 +104,7 @@ class SourceService(Service):
         Returns:
             _type_: _description_
         """
-        # TODO: To be extended
+        # TODO: To be extended  # noqa
         if only1080p and torrent.resolution.startswith("1080p"):
             self.seedr_service.add_file_from_magnet(torrent.magnet)
         else:
