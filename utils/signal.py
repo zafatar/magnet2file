@@ -1,3 +1,5 @@
+"""This module contains a signal handler for system signals"""
+
 import sys
 
 from signal import signal, SIGINT
