@@ -6,6 +6,7 @@
 coming from its API.
 """
 from __future__ import annotations
+import select
 
 from typing import List
 
@@ -48,10 +49,16 @@ class Yify(SourceService):
             film_number = input(f"\nSelect a movie for details [1..{len(films)}]: ")
             selected_film = films[int(film_number) - 1]
 
-            for torrent in selected_film.torrents:
-                print(torrent)
-                if torrent.resolution.startswith("1080p"):
-                    self.seedr_service.add_file_from_magnet(torrent.magnet)
+            Yify.print_torrents(selected_film.torrents)
+
+            torrent_number = input(
+                f"\nSelect a torrent to add [1..{len(selected_film.torrents)}]: "
+            )
+
+            selected_torrent = selected_film.torrents[int(torrent_number) - 1]
+            print(selected_torrent.magnet[0])
+            self.seedr_service.add_file_from_magnet(selected_torrent.magnet[0])
+
         else:
             print(f"No film found for `{search_string}`\n")
 
@@ -134,6 +141,8 @@ class Yify(SourceService):
         torrents = film_details_tree.xpath('.//div[@class="modal-torrent"]')
         for torrent_node in torrents:
             torrent = Yify._extract_torrent(torrent_node)
+            torrent.title = film.title
+
             film.torrents.append(torrent)
 
     @staticmethod
@@ -190,6 +199,9 @@ class Yify(SourceService):
         torrent_type = torrent_node.xpath('.//div[@class="modal-quality"]//text()')
         torrent_size = torrent_node.xpath('.//p[@class="quality-size"]/text()')
         magnet_link = torrent_node.xpath('.//a[contains(@class, "magnet")]//@href')
+
+        # remove the empty or whitespace strings from the list
+        torrent_size = list(filter(lambda x: x.strip(), torrent_size))
 
         torrent = Torrent(
             resolution=torrent_type[0], size=torrent_size[1], magnet=magnet_link
