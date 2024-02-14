@@ -6,7 +6,6 @@
 coming from its API.
 """
 from __future__ import annotations
-import select
 
 from typing import List
 
