@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""This is the client which interacts with the user
+"""
+This is the client which interacts with the user
 and collects the input and presents the input from
 different services.
 """
 from __future__ import print_function
 
-from signal import signal, SIGINT
 import sys
 import logging
 import argparse
@@ -14,13 +14,15 @@ from utils.ipchecker import IPChecker
 from utils.nordvpn import get_country_list
 from utils.utils import yes_or_no
 
+from utils.signal import add_sigint_handler
+
 from config import get_config
 
 from magnet2file.services import Services
 from magnet2file.services.service_factory import ServiceFactory
 
 # Read and load command line params
-parser = argparse.ArgumentParser(description='Magnet2File client')
+parser = argparse.ArgumentParser(description="Magnet2File client")
 parser.add_argument("--debug", help="activate debug mode", action="store_true")
 args = parser.parse_args()
 debug = args.debug
@@ -44,31 +46,17 @@ config = get_config()
 countries = get_country_list()
 
 
-def handler(signal_received, frame):
-    """This is a handler method which runs with a system signal
-
-    Args:
-        signal_received (Signal): Signal type
-        frame (Frame): Frame which received the signal
+def main():
     """
-    logger.info('%s - %s', signal_received, frame)
-
-    # Handle any cleanup here
-    print('\n\nExiting...\nBye.\n')
-    sys.exit()
-
-
-if __name__ == '__main__':
-    # Tell Python to run the handler() function when SIGINT is recieved
-    signal(SIGINT, handler)
-
+    Main function
+    """
     # Check the connection IP and location.
-    ipchecker = IPChecker(service=config.IPCHECKER_SERVICE)
+    ipchecker = IPChecker()
 
-    curr_conn = ipchecker.check()
-    country = curr_conn.get('country')
-    country_name = countries[curr_conn.get('country')].get('name')
-    ip = curr_conn.get('ip')
+    curr_result = ipchecker.check()
+    country = curr_result.get("country")
+    country_name = countries[curr_result.get("country")].get("name")
+    ip = curr_result.get("ip")
 
     print(f"Country: {country_name} ({country}) ({ip})")
 
@@ -87,7 +75,9 @@ if __name__ == '__main__':
         index = index + 1
         print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
 
-    selected_service_index = input(f"\nSelect the service [1..{len(services_as_list)}]: ")
+    selected_service_index = input(
+        f"\nSelect the service [1..{len(services_as_list)}]: "
+    )
     selected_service = services_as_list[int(selected_service_index) - 1]
 
     print(f"\nSelected service: {selected_service}")
@@ -97,3 +87,11 @@ if __name__ == '__main__':
 
     if service:
         service.run()
+
+
+if __name__ == "__main__":
+    # Tell Python to run the handler() function when SIGINT is received
+    add_sigint_handler()
+
+    while True:
+        main()

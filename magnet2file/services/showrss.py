@@ -23,6 +23,7 @@ class ShowRSS(SourceService):
     """
     ShowRSS.info class
     """
+
     CODE = Services.SHOWRSS
     seedr_service = None
 
@@ -42,7 +43,7 @@ class ShowRSS(SourceService):
 
             series_number = input(f"\nSelect a series for details [1..{no_series}]: ")
 
-            selected_series = series[int(series_number)-1]
+            selected_series = series[int(series_number) - 1]
 
             ShowRSS.get_series_torrents(series=selected_series)
 
@@ -66,7 +67,7 @@ class ShowRSS(SourceService):
         Returns:
             list: list of Series instances as list
         """
-        search_url = f'{MAIN_URL}/browse/'
+        search_url = f"{MAIN_URL}/browse/"
 
         response = requests.get(search_url, verify=True, timeout=5)
         tree = html.fromstring(response.content)
@@ -93,9 +94,7 @@ class ShowRSS(SourceService):
             series (Series, optional): Series whose episodes to be downloaded.
             Defaults to None.
         """
-        response = requests.get(series.link,
-                                verify=True,
-                                timeout=5)
+        response = requests.get(series.link, verify=True, timeout=5)
         tree = html.fromstring(response.content)
 
         links = tree.xpath('//ul[@class="user-timeline"]/li')
@@ -117,7 +116,7 @@ class ShowRSS(SourceService):
 
         for index, serie in enumerate(series):
             padded_title = str(serie.title).ljust(max_title_length)
-            print(f'{str(index + 1).rjust(3)} - {padded_title}')
+            print(f"{str(index + 1).rjust(3)} - {padded_title}")
 
     @staticmethod
     def _extract_series(series_node: HtmlElement = None) -> Series:
@@ -130,10 +129,10 @@ class ShowRSS(SourceService):
         Returns:
             Series: Series instance
         """
-        series_id = series_node.get('value')
+        series_id = series_node.get("value")
         title = series_node.text
 
-        series = Series(title=title, link=f'{MAIN_URL}/browse/{series_id}')
+        series = Series(title=title, link=f"{MAIN_URL}/browse/{series_id}")
 
         return series
 
@@ -148,13 +147,11 @@ class ShowRSS(SourceService):
         Returns:
             Torrent: Torrent instance.
         """
-        magnet_link = torrent_node.xpath('.//@href')
+        magnet_link = torrent_node.xpath(".//@href")
         title = torrent_node.text_content().strip()
-        resolution = '1080p'
-        size = '0 Gb'
+        resolution = "1080p"
+        size = "0 Gb"
 
-        # TODO: get the proper resolution and size if possible.
-        return Torrent(title=title,
-                       resolution=resolution,
-                       size=size,
-                       magnet=magnet_link)
+        return Torrent(
+            title=title, resolution=resolution, size=size, magnet=magnet_link
+        )

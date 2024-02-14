@@ -16,36 +16,42 @@ def get_country_list():
     """
     action = "servers_countries"
     url = f"{NV_URL}?action={action}"
-    ip_json = requests.get(url).text
+    try:
+        ip_json = requests.get(url, timeout=10).text
+    except requests.exceptions.Timeout:
+        print("Cannot get country list. Timeout")
+        return {}
 
     countries = json.loads(ip_json)
 
     results = {}
     for country in countries:
         result = {
-            'id': country.get('id'),
-            'code': country.get('code'),
-            'name': country.get('name'),
-            'servers_count': country.get('servers_count')
+            "id": country.get("id"),
+            "code": country.get("code"),
+            "name": country.get("name"),
+            "servers_count": country.get("servers_count"),
         }
 
-        results[country.get('code')] = result
+        results[country.get("code")] = result
 
     return results
 
 
-def print_country_list(countries: dict = None) -> None:
+def print_country_list(countries: dict) -> None:
     """This prints the list of countries given as a dict
 
     Args:
         countries (dict, optional): List of countries. Defaults to None.
     """
     for country_code, country in countries.items():
-        print("{%s} : {%s} : {%s} ({%s})",
-              country.get('id'),
-              country_code,
-              country.get('name'),
-              country.get('servers_count'))
+        print(
+            "- {%s} [{%s}] {%s} ({%s})",
+            country.get("id"),
+            country_code,
+            country.get("name"),
+            country.get("servers_count"),
+        )
 
 
 def get_best_available_server(country_id: int = 0):
@@ -62,7 +68,7 @@ def get_best_available_server(country_id: int = 0):
     country_id = 174
     url = f"{NV_URL}?action={action}&filters={'country_id':{country_id}}"
 
-    ip_json = requests.get(url).text
+    ip_json = requests.get(url, timeout=10).text
 
     result = json.loads(ip_json)
     return result

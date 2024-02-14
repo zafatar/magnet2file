@@ -13,7 +13,7 @@ def sanitize_search_string(search_string: str = None) -> str:
     Returns:
         str: cleaned string
     """
-    return ' '.join(search_string.split())
+    return " ".join(search_string.split())
 
 
 def update_progress(count: int = 0, total: int = 100):
@@ -28,7 +28,7 @@ def update_progress(count: int = 0, total: int = 100):
     if progress > 100 or count == total:
         progress = 100
 
-    print(progress_bar(progress), end='')
+    print(progress_bar(progress), end="")
 
     if progress == 100:
         print("")  # kind of eol
@@ -44,8 +44,8 @@ def progress_bar(progress: int = 0) -> str:
     Returns:
         str: progres bar with percentage info.
     """
-    completed = '#'*(progress//10)
-    not_completed = ' '*(10-progress//10)
+    completed = "#" * (progress // 10)
+    not_completed = " " * (10 - progress // 10)
     return f"\r [{completed}{not_completed}] {progress}%"
 
 
@@ -63,10 +63,10 @@ def pprint_dict(dict_to_print: dict = None) -> None:
             max_title_length = len(key)
 
     for key, value in dict_to_print.items():
-        print("\t%s - %s" % (str(key).ljust(max_title_length), value))
+        print(f"\t{str(key).ljust(max_title_length)} - {value}")
 
 
-def yes_or_no(question: str = None, default: str = "yes") -> bool:
+def yes_or_no(question: str, default: str = "yes") -> bool:
     """Ask a yes/no question via raw_input() and return their answer.
 
     "question" is a string that is presented to the user.
@@ -94,7 +94,7 @@ def yes_or_no(question: str = None, default: str = "yes") -> bool:
         elif choice in valid:
             ret = valid[choice]
         else:
-            print("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
+            print("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
 
         if ret is not None:
             break

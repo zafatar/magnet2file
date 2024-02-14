@@ -7,6 +7,7 @@ class Torrent:
     """
     Torrent class
     """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, title=None, resolution=None, size=None, magnet=None):
@@ -16,6 +17,4 @@ class Torrent:
         self.magnet = magnet
 
     def __repr__(self):
-        return f'<Torrent: {self.resolution}' + \
-                '({self.size}) {self.title} = ' + \
-                '{self.magnet[0:50]}>'
+        return f"<Torrent: {self.resolution} - ({self.size}) {self.title} = {self.magnet[0:50]}>"

@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-"""Library for the IPInfo related calls
 """
+Library for the ifconfig.co related calls
+"""
+
 from requests import Response
 from utils.ipchecker.services import IPService
 
 
-CHECK_URL = "https://ipinfo.io"
-SERVICE_NAME = "ipinfo.io"
+CHECK_URL = "https://ifconfig.co/json"
+SERVICE_NAME = "ifconfig.co"
 
 
-class IPInfo(IPService):
-    """IP service class for IPInfo"""
+class IfconfigCo(IPService):
+    """IP service class for IfconfigCo"""
 
     # pylint: disable=too-few-public-methods
 
@@ -22,5 +24,5 @@ class IPInfo(IPService):
         return ip_value
 
     def _country(self, res: Response) -> str:
-        country = str(res.json().get("country"))
+        country = str(res.json().get("country_iso"))
         return country
