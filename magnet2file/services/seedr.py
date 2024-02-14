@@ -126,6 +126,8 @@ class Seedr:
 
         ret = response.json()
 
+        print(f'File added: {ret.get("user_torrent_id")}\n')
+
         return ret.get("user_torrent_id")
 
     def get_folders_list(self, folder_id: int = 0) -> dict:
