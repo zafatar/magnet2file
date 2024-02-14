@@ -26,6 +26,7 @@ class Config:
         """load the config values from the global variable
         into the Config class attributes.
         """
+        # pylint: disable=invalid-name
         self.DEBUG = True
         self.TESTING = False
         self.IPCHECKER_SERVICE = config["ipchecker_service"]

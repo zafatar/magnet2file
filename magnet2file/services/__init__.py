@@ -104,7 +104,6 @@ class SourceService(Service):
         Returns:
             _type_: _description_
         """
-        # TODO: To be extended  # noqa
         if only1080p and torrent.resolution.startswith("1080p"):
             self.seedr_service.add_file_from_magnet(torrent.magnet)
         else:

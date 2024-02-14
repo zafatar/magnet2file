@@ -3,11 +3,13 @@
 """
 import enum
 from requests import Response
+from requests.exceptions import Timeout
 
 from utils.ipchecker.services.ifconfigme import IfconfigMe
 from utils.ipchecker.services.ifconfigco import IfconfigCo
 from utils.ipchecker.services.ipinfo import IPInfo
 from utils.ipchecker.services.ipapi import IPApi
+
 
 VERSION = "0.0.1"
 
@@ -44,24 +46,25 @@ class IPChecker:
         try:
             self.service = IPInfo()
             result = self.service.check()
-        except Exception:
+        except Timeout:
             try:
                 self.service = IfconfigMe()
                 result = self.service.check()
-            except Exception:
+            except Timeout:
                 try:
                     self.service = IfconfigCo()
                     result = self.service.check()
-                except Exception:
+                except Timeout:
                     try:
                         self.service = IPApi()
                         result = self.service.check()
-                    except Exception:
+                    except Timeout:
                         result = None
 
         print(f"IP Checker Service name: {self.service.service_name}")
 
         if result is None:
+            # pylint: disable=broad-exception-raised
             raise Exception("Can't find the current IP")
 
         return result
