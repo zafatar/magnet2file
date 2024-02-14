@@ -98,14 +98,13 @@ class Eztv(SourceService):
         Returns:
             Torrent: Torrent instance.
         """
-        magnet_link = torrent_node.xpath(".//td/a[starts-with(@href,'magnet')]/@href")[
-            0
-        ]
+        magnet_links = torrent_node.xpath(".//td/a[starts-with(@href,'magnet')]/@href")
+        magnet_link = magnet_links[0]
+
         title = torrent_node.xpath(".//td/a[@class='epinfo']")[0].text_content().strip()
         resolution = "1080p"
         size = "0 Gb"
 
-        # TODO: get the proper resolution and size if possible.
         return Torrent(
             title=title, resolution=resolution, size=size, magnet=magnet_link
         )
