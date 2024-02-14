@@ -84,11 +84,13 @@ class SourceService(Service):
         """
         max_title_length = Service.max_title_size(entities=torrents)
 
-        for index, film in enumerate(torrents, 1):
+        for index, torrent in enumerate(torrents, 1):
             padded_index = str(index).rjust(3)
-            padded_title = str(film.title).ljust(max_title_length)
+            padded_title = str(torrent.title).ljust(max_title_length)
+            padded_quality = str(torrent.resolution).rjust(5)
+            padded_size = str(torrent.size).rjust(6)
 
-            print(f"{padded_index} - {padded_title}")
+            print(f"{padded_index} - {padded_title} - {padded_quality} - {padded_size}")
 
     def save_torrent_to_seedr(
         self, torrent: Torrent = None, only1080p: bool = True
