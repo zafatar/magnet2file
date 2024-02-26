@@ -38,9 +38,10 @@ class Seedr:
         available_actions = {1: "Download", 2: "Delete"}
 
         available_folders = {
-            1: "/media/pi/DEPO_1/share/Movies/",
-            2: "/media/pi/DEPO_1/share/Series/",
-            3: "Enter the folder manually...",
+            1: "/mnt/SSD_2TB/media/Movies/",
+            2: "/mnt/SSD_2TB/media/Series/",
+            3: "/mnt/SSD_2TB/media/Turkce/",
+            4: "Enter the folder manually...",
         }
 
         print("Do you want to download or delete file?")
@@ -85,12 +86,16 @@ class Seedr:
 
             selected_action = input("\nSelect or enter folder [1..3]: ")
 
-            selected_folder = None
-            if int(selected_action) == 1 or int(selected_action) == 2:
+            selected_folder: str = ""
+            if (
+                int(selected_action) == 1
+                or int(selected_action) == 2
+                or int(selected_action) == 3
+            ):
                 selected_folder = available_folders.get(int(selected_action))
             else:
                 selected_folder = input(
-                    "\nEnter the folder location (ex. /media/pi/): "
+                    "\nEnter the folder location (ex. /mnt/DISK/): "
                 )
 
             self.get_file(
@@ -164,7 +169,7 @@ class Seedr:
 
         return folders
 
-    def get_file(self, file_id: int = 0, file_name: str = None, folder: str = "."):
+    def get_file(self, file_name: str, file_id: int = 0, folder: str = "."):
         """This method downloads a file from Seedr into a local folder.
         It displays a progress bar during the download operation.
 
