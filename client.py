@@ -7,8 +7,9 @@ different services.
 from __future__ import print_function
 
 import sys
-import logging
 import argparse
+
+from utils.logging import logger
 
 from utils.ipchecker import IPChecker
 from utils.nordvpn import get_country_list
@@ -28,16 +29,7 @@ args = parser.parse_args()
 debug = args.debug
 
 # Prepare and set the logger
-logger = logging.getLogger(__name__)
-logging.basicConfig()
-
-if debug:
-    logger.setLevel(logging.DEBUG)
-    logger.debug("****************************")
-    logger.debug("*** Debug mode is active ***")
-    logger.debug("****************************")
-else:
-    logger.setLevel(logging.INFO)
+# logger = get_logger(__name__, debug)
 
 # Load the config
 config = get_config()
