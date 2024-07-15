@@ -1,0 +1,18 @@
+name: magnet 
+
+channels:
+  - conda-forge # We use conda-forge, not default one.
+
+dependencies:
+  - python=3.12.*
+  - pip=24.*
+  
+  - pip:
+    - requests==2.32.3
+    - lxml==5.2.2
+    - pytest==8.2.2
+    - PyYAML==6.0.1
+    - flake8==7.1.0
+    - autopep8==2.3.1
+    - ruff==0.5.1  
+
