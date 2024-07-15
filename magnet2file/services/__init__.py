@@ -87,8 +87,8 @@ class SourceService(Service):
         for index, torrent in enumerate(torrents, 1):
             padded_index = str(index).rjust(3)
             padded_title = str(torrent.title).ljust(max_title_length)
-            padded_quality = str(torrent.resolution).rjust(5)
-            padded_size = str(torrent.size).rjust(6)
+            padded_quality = str(torrent.resolution).rjust(8)
+            padded_size = str(torrent.size).rjust(8)
 
             print(f"{padded_index} - {padded_title} - {padded_quality} - {padded_size}")
 

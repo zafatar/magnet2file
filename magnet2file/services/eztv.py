@@ -7,6 +7,8 @@ coming from its API.
 """
 import requests
 
+import logging
+
 from lxml import html
 from lxml.html import HtmlElement
 from utils.utils import sanitize_search_string
@@ -16,6 +18,8 @@ from magnet2file.models.torrent import Torrent
 
 MAIN_URL = "https://eztvx.to"
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class Eztv(SourceService):
     """
@@ -57,6 +61,9 @@ class Eztv(SourceService):
             list: list of Series instances as list
         """
         search_url = f"{MAIN_URL}/search/?q1={search_string}&search=Search"
+
+        logger.debug(f'Searching for `{search_string}` in Eztv...')
+        logger.debug(f'URL: {search_url}')
 
         cookies = {}
 
@@ -102,9 +109,36 @@ class Eztv(SourceService):
         magnet_link = magnet_links[0]
 
         title = torrent_node.xpath(".//td/a[@class='epinfo']")[0].text_content().strip()
-        resolution = "1080p"
-        size = "0 Gb"
+
+        size = torrent_node.xpath(".//td[@class='forum_thread_post']")[3].text_content().strip()
+        
+        resolution = Eztv.get_resolution_from_title(title)
 
         return Torrent(
             title=title, resolution=resolution, size=size, magnet=magnet_link
         )
+
+    @staticmethod
+    def get_resolution_from_title(title: str) -> str: 
+        """This method extracts resolution from the title of the torrent.
+
+        Args:
+            title (str): title of the torrent.
+
+        Returns:
+            str: resolution of the torrent.
+        """
+        if "2160p" in title:
+            resolution = "2160p"
+        if "1080p" in title:
+            resolution = "1080p"
+        elif "720p" in title:
+            resolution = "720p"
+        elif "480p" in title:
+            resolution = "480p"
+        elif "4K" in title:
+            resolution = "4K"
+        else: 
+            resolution = "Unknown"
+
+        return resolution
