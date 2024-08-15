@@ -62,14 +62,19 @@ def main():
     # List the available services.
     print("\nAvailable services:")
     services_as_list = Services.as_array()
+    selected_service_index = -1
 
-    for index, service in enumerate(services_as_list):
-        index = index + 1
-        print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
+    while int(selected_service_index) not in range(1, len(services_as_list) + 1):
+        if selected_service_index != -1:
+            print("\nInvalid selection. Please try again.")
 
-    selected_service_index = input(
-        f"\nSelect the service [1..{len(services_as_list)}]: "
-    )
+        for index, service in enumerate(services_as_list, start=1):
+            print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
+
+        selected_service_index = input(
+            f"\nSelect the service [1..{len(services_as_list)}]: "
+        )
+
     selected_service = services_as_list[int(selected_service_index) - 1]
 
     print(f"\nSelected service: {selected_service}")
@@ -78,8 +83,10 @@ def main():
     service = ServiceFactory.get_service(selected_service, config)
 
     if service:
-        service.run()
-
+        try:
+            service.run()
+        except Exception as exp: 
+            logger.error(f"*** {exp} ***")    
 
 if __name__ == "__main__":
     # Tell Python to run the handler() function when SIGINT is received
