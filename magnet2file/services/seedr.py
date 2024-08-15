@@ -123,7 +123,7 @@ class Seedr:
         url = "https://www.seedr.cc/rest/torrent/magnet"
         auth = (self.email, self.password)
         response = requests.post(
-            url, data={"magnet": magnet_link}, auth=auth, timeout=10
+            url, data={"magnet": magnet_link}, auth=auth, timeout=30
         )
 
         if response.status_code != 200:
