@@ -106,9 +106,11 @@ class SourceService(Service):
         Returns:
             _type_: _description_
         """
-        if only1080p and torrent.resolution.startswith("1080p"):
-            self.seedr_service.add_file_from_magnet(torrent.magnet)
-        else:
-            print(
-                "The resolution of the selected episode is not 1080p. Please try again."
-            )
+        # if only1080p and torrent.resolution.startswith("1080p"):
+        #     self.seedr_service.add_file_from_magnet(torrent.magnet)
+        # else:
+        #     print(
+        #         "The resolution of the selected episode is not 1080p. Please try again."
+        #     )
+
+        self.seedr_service.add_file_from_magnet(torrent.magnet)
