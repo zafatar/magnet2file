@@ -5,10 +5,11 @@ channels:
 
 dependencies:
   - python=3.12.*
-  - pip=24.*
+  - pip=25.*
   
   - pip:
     - requests==2.32.3
+    - aiohttp==3.11.12
     - lxml==5.2.2
     - pydantic==2.8.2
     - pytest==8.2.2
@@ -17,4 +18,5 @@ dependencies:
     - autopep8==2.3.1
     - ruff==0.5.1  
     - tqdm==4.67.0
+    - pycountry==24.6.1 
     

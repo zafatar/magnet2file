@@ -9,8 +9,8 @@ logging.basicConfig(
 def get_logger(debug: bool=False) -> logging.Logger:
     # Prepare and set the logger
     logger = logging.getLogger()
-
-    if debug:
+    print("DEBUG: ", debug)
+    if debug is True:
         logger.setLevel(logging.DEBUG)
         logger.debug("****************************")
         logger.debug("*** Debug mode is active ***")
@@ -20,4 +20,4 @@ def get_logger(debug: bool=False) -> logging.Logger:
 
     return logger
 
-logger = get_logger(os.getenv('DEBUG', True))
+logger = get_logger(os.getenv('DEBUG', False))
