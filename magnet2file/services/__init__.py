@@ -87,8 +87,8 @@ class SourceService(Service):
         for index, torrent in enumerate(torrents, 1):
             padded_index = str(index).rjust(3)
             padded_title = str(torrent.title).ljust(max_title_length)
-            padded_quality = str(torrent.resolution).rjust(5)
-            padded_size = str(torrent.size).rjust(6)
+            padded_quality = str(torrent.resolution).rjust(8)
+            padded_size = str(torrent.size).rjust(8)
 
             print(f"{padded_index} - {padded_title} - {padded_quality} - {padded_size}")
 
@@ -106,9 +106,11 @@ class SourceService(Service):
         Returns:
             _type_: _description_
         """
-        if only1080p and torrent.resolution.startswith("1080p"):
-            self.seedr_service.add_file_from_magnet(torrent.magnet)
-        else:
-            print(
-                "The resolution of the selected episode is not 1080p. Please try again."
-            )
+        # if only1080p and torrent.resolution.startswith("1080p"):
+        #     self.seedr_service.add_file_from_magnet(torrent.magnet)
+        # else:
+        #     print(
+        #         "The resolution of the selected episode is not 1080p. Please try again."
+        #     )
+
+        self.seedr_service.add_file_from_magnet(torrent.magnet)

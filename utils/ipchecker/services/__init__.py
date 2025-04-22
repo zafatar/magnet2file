@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 """IPService class for the parent of IP Checker classes
 """
+import os
+
 from abc import ABC, abstractmethod
 from requests import Response, get
 from requests.exceptions import Timeout, HTTPError
 
+from utils.logging import logger
+
+# Prepare and set the logger
+# logger = get_logger(__name__, os.getenv('DEBUG', True))
 
 CHECK_URL = ""
 
@@ -27,6 +33,7 @@ class IPService(ABC):
             dict: IP and country code as dict.
         """
         try:
+            logger.debug(f'Checking IP from {self.check_url}')
             res = self._get_check_url()
         except Timeout as err:
             raise Timeout("Connection timeout") from err

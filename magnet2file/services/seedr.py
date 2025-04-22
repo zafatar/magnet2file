@@ -11,6 +11,7 @@ import requests
 from magnet2file.services import Services
 
 from utils.utils import pprint_dict
+from tqdm import tqdm
 
 MIN_CHUNK_SIZE = 1024 * 1024
 
@@ -123,7 +124,7 @@ class Seedr:
         url = "https://www.seedr.cc/rest/torrent/magnet"
         auth = (self.email, self.password)
         response = requests.post(
-            url, data={"magnet": magnet_link}, auth=auth, timeout=10
+            url, data={"magnet": magnet_link}, auth=auth, timeout=30
         )
 
         if response.status_code != 200:
@@ -194,21 +195,13 @@ class Seedr:
             if total is None:
                 local_file.write(response.content)
             else:
-                downloaded = 0
                 total = int(total)
                 max_chunk_size = max(int(total / 1000), MIN_CHUNK_SIZE)
 
-                for data in response.iter_content(chunk_size=max_chunk_size):
-                    downloaded += len(data)
-                    local_file.write(data)
-                    # Calculate the done and todo parts and
-                    # presents as progress bar.
-                    done = int(50 * downloaded / total)
-                    done_str = "█" * done
-                    todo_str = "." * (50 - done)
-
-                    sys.stdout.write(f"\r[{done_str}{todo_str}]")
-                    sys.stdout.flush()
+                with tqdm(total=total, unit='B', unit_scale=True, desc=file_name) as pbar:
+                    for data in response.iter_content(chunk_size=max_chunk_size):
+                        local_file.write(data)
+                        pbar.update(len(data))
             sys.stdout.write("\n")
 
         print(f"\nFile `{file_name}` downloaded into `{folder}.`")

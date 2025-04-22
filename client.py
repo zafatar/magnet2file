@@ -7,11 +7,12 @@ different services.
 from __future__ import print_function
 
 import sys
-import logging
 import argparse
+import pycountry
+
+from utils.logging import logger
 
 from utils.ipchecker import IPChecker
-from utils.nordvpn import get_country_list
 from utils.utils import yes_or_no
 
 from utils.signal import add_sigint_handler
@@ -28,22 +29,10 @@ args = parser.parse_args()
 debug = args.debug
 
 # Prepare and set the logger
-logger = logging.getLogger(__name__)
-logging.basicConfig()
-
-if debug:
-    logger.setLevel(logging.DEBUG)
-    logger.debug("****************************")
-    logger.debug("*** Debug mode is active ***")
-    logger.debug("****************************")
-else:
-    logger.setLevel(logging.INFO)
+# logger = get_logger(__name__, debug)
 
 # Load the config
 config = get_config()
-
-# Get the country list from NV
-countries = get_country_list()
 
 
 def main():
@@ -55,7 +44,7 @@ def main():
 
     curr_result = ipchecker.check()
     country = curr_result.get("country")
-    country_name = countries[curr_result.get("country")].get("name")
+    country_name = pycountry.countries.get(alpha_2=country).name
     ip = curr_result.get("ip")
 
     print(f"Country: {country_name} ({country}) ({ip})")
@@ -70,14 +59,19 @@ def main():
     # List the available services.
     print("\nAvailable services:")
     services_as_list = Services.as_array()
+    selected_service_index = -1
 
-    for index, service in enumerate(services_as_list):
-        index = index + 1
-        print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
+    while int(selected_service_index) not in range(1, len(services_as_list) + 1):
+        if selected_service_index != -1:
+            print("\nInvalid selection. Please try again.")
 
-    selected_service_index = input(
-        f"\nSelect the service [1..{len(services_as_list)}]: "
-    )
+        for index, service in enumerate(services_as_list, start=1):
+            print(f"{str(index).rjust(3)} - [{service.name}] - [{service.value}]")
+
+        selected_service_index = input(
+            f"\nSelect the service [1..{len(services_as_list)}]: "
+        )
+
     selected_service = services_as_list[int(selected_service_index) - 1]
 
     print(f"\nSelected service: {selected_service}")
@@ -86,8 +80,10 @@ def main():
     service = ServiceFactory.get_service(selected_service, config)
 
     if service:
-        service.run()
-
+        try:
+            service.run()
+        except Exception as exp: 
+            logger.error(f"*** {exp} ***")    
 
 if __name__ == "__main__":
     # Tell Python to run the handler() function when SIGINT is received
