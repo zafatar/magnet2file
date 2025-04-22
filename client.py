@@ -8,11 +8,11 @@ from __future__ import print_function
 
 import sys
 import argparse
+import pycountry
 
 from utils.logging import logger
 
 from utils.ipchecker import IPChecker
-from utils.nordvpn import get_country_list
 from utils.utils import yes_or_no
 
 from utils.signal import add_sigint_handler
@@ -34,9 +34,6 @@ debug = args.debug
 # Load the config
 config = get_config()
 
-# Get the country list from NV
-countries = get_country_list()
-
 
 def main():
     """
@@ -47,7 +44,7 @@ def main():
 
     curr_result = ipchecker.check()
     country = curr_result.get("country")
-    country_name = countries[curr_result.get("country")].get("name")
+    country_name = pycountry.countries.get(alpha_2=country).name
     ip = curr_result.get("ip")
 
     print(f"Country: {country_name} ({country}) ({ip})")
